@@ -34,7 +34,6 @@
 
   ::selection { background: var(--violet); color: #000; }
 
-  /* mouse-reactive blob field, sits behind everything */
   .field {
     position: fixed;
     inset: 0;
@@ -184,8 +183,6 @@
 </main>
 
 <script>
-  // each blob follows the cursor at its own speed/offset so the field feels alive
-  // rather than one blob rigidly glued to the pointer
   const blobs = [
     { el: document.querySelector('.blob-a'), ease: 0.09, ox: 0,    oy: 0   },
     { el: document.querySelector('.blob-b'), ease: 0.05, ox: 120,  oy: -80 },
@@ -211,7 +208,6 @@
   function tick() {
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
-    // how far the cursor sits from center, used to nudge scale/rotation per blob
     const distFromCenter = Math.hypot(mouseX - cx, mouseY - cy) / Math.hypot(cx, cy);
 
     blobs.forEach((b, i) => {
