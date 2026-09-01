@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /
+
+# leave real files/folders (index2.php, upload.html, assets/, api/, etc.) alone
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# anything left over is treated as a paste slug -> dihbin.lol/howtomakeacake
+RewriteRule ^([A-Za-z0-9\-]+)$ paste.php?slug=$1 [L,QSA]
