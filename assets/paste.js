@@ -1,12 +1,20 @@
 (function () {
+  const slug = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
+
+  const pasteView = document.getElementById('pasteView');
+  const notFound = document.getElementById('notFound');
+  const contentView = document.getElementById('contentView');
+  const titleDisplay = document.getElementById('titleDisplay');
+  const authorDisplay = document.getElementById('authorDisplay');
+  const dateDisplay = document.getElementById('dateDisplay');
+  const viewsDisplay = document.getElementById('viewsDisplay');
+  const commentsList = document.getElementById('commentsList');
   const sideToggle = document.getElementById('sideToggle');
   const sidePanel = document.getElementById('sidePanel');
   const commentInput = document.getElementById('commentInput');
   const commentCount = document.getElementById('commentCount');
   const commentBtn = document.getElementById('commentBtn');
   const commentStatus = document.getElementById('commentStatus');
-  const commentsList = document.getElementById('commentsList');
-  const slug = document.body.dataset.slug;
 
   const MAX_COMMENT = 2000;
 
@@ -25,10 +33,76 @@
     commentStatus.className = 'status-msg show ' + (isError ? 'error' : 'ok');
   }
 
-  function escapeHtml(str) {
+  function renderComment(c) {
     const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+    div.className = 'comment';
+
+    const who = document.createElement('div');
+    who.className = 'who';
+    const author = document.createElement('span');
+    author.textContent = c.author;
+    const date = document.createElement('span');
+    date.textContent = c.date;
+    who.appendChild(author);
+    who.appendChild(date);
+
+    const body = document.createElement('div');
+    body.className = 'body-text';
+    body.textContent = c.text;
+
+    div.appendChild(who);
+    div.appendChild(body);
+    return div;
+  }
+
+  function renderComments(comments) {
+    commentsList.innerHTML = '';
+    if (!comments.length) {
+      const p = document.createElement('p');
+      p.style.color = 'var(--muted)';
+      p.style.fontSize = '12.5px';
+      p.textContent = 'No comments yet.';
+      commentsList.appendChild(p);
+      return;
+    }
+    comments.forEach(c => commentsList.appendChild(renderComment(c)));
+  }
+
+  async function loadPaste() {
+    if (!slug) {
+      pasteView.style.display = 'none';
+      notFound.style.display = 'flex';
+      return;
+    }
+
+    try {
+      const res = await fetch('api/paste.php?slug=' + encodeURIComponent(slug));
+      const data = await res.json();
+
+      if (data.error) {
+        pasteView.style.display = 'none';
+        notFound.style.display = 'flex';
+        return;
+      }
+
+      document.title = data.title + ' — dihbin.lol';
+      contentView.textContent = data.content;
+      titleDisplay.textContent = data.title;
+      if (data.pinned) {
+        const tag = document.createElement('span');
+        tag.className = 'pin-tag';
+        tag.textContent = 'Pinned';
+        titleDisplay.appendChild(document.createTextNode(' '));
+        titleDisplay.appendChild(tag);
+      }
+      authorDisplay.textContent = data.author;
+      dateDisplay.textContent = data.date;
+      viewsDisplay.textContent = data.views;
+      renderComments(data.comments);
+    } catch (err) {
+      pasteView.style.display = 'none';
+      notFound.style.display = 'flex';
+    }
   }
 
   commentBtn.addEventListener('click', async () => {
@@ -55,15 +129,7 @@
       } else {
         const emptyMsg = commentsList.querySelector('p');
         if (emptyMsg) emptyMsg.remove();
-
-        const div = document.createElement('div');
-        div.className = 'comment';
-        div.innerHTML = `
-          <div class="who"><span>${escapeHtml(data.comment.author)}</span><span>${escapeHtml(data.comment.date)}</span></div>
-          <div class="body-text">${escapeHtml(data.comment.text)}</div>
-        `;
-        commentsList.appendChild(div);
-
+        commentsList.appendChild(renderComment(data.comment));
         commentInput.value = '';
         commentCount.textContent = `0 / ${MAX_COMMENT.toLocaleString()}`;
         showStatus('Comment posted.', false);
@@ -75,4 +141,6 @@
       commentBtn.textContent = 'Post comment';
     }
   });
+
+  loadPaste();
 })();

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dihbin.lol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="field">
+  <div class="blob blob-c"></div>
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+</div>
+<div class="grain"></div>
+
+<nav class="topnav">
+  <a class="brand" href="index.html">DIHBIN.LOL</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="upload.html">Add Paste</a>
+    <a href="users.html">Users</a>
+    <a href="tos.html">Terms of Service</a>
+  </div>
+</nav>
+
+<!-- shown if the slug doesn't exist -->
+<div class="center-page" id="notFound" style="display:none;">
+  <div class="board" style="text-align:center;">
+    <h1 style="font-family:'Bebas Neue',sans-serif; font-size:32px; margin-bottom:10px;">404</h1>
+    <p style="color:var(--muted);">That paste doesn't exist.</p>
+    <p style="margin-top:16px;"><a class="btn" href="index.html">Back home</a></p>
+  </div>
+</div>
+
+<div id="pasteView">
+  <button class="side-toggle" id="sideToggle" title="toggle panel">☰</button>
+
+  <div class="editor-shell">
+    <div class="editor-main" id="editorMain">
+      <pre class="content-view" id="contentView">Loading...</pre>
+    </div>
+
+    <aside class="side-panel" id="sidePanel">
+      <a class="side-panel-header" href="index.html">DIHBIN.LOL</a>
+
+      <div>
+        <div class="field-group"><label>Title</label></div>
+        <div style="font-size:15px; font-weight:500;" id="titleDisplay"></div>
+      </div>
+
+      <div class="meta-line"><span>Author</span><span id="authorDisplay"></span></div>
+      <div class="meta-line"><span>Added</span><span id="dateDisplay"></span></div>
+      <div class="meta-line"><span>Views</span><span id="viewsDisplay"></span></div>
+
+      <div style="border-top:1px solid var(--border); padding-top:16px;">
+        <div class="table-heading" style="font-size:15px; margin-bottom:10px;">Comments</div>
+
+        <div class="comments" id="commentsList"></div>
+
+        <div class="field-group" style="margin-top:14px;">
+          <label for="commentInput">Add a comment</label>
+          <textarea id="commentInput" class="comment-input" maxlength="2000" placeholder="say something..."></textarea>
+        </div>
+        <div class="char-count" id="commentCount">0 / 2,000</div>
+        <button class="btn btn-primary" id="commentBtn" style="margin-top:8px; width:100%;">Post comment</button>
+        <div class="status-msg" id="commentStatus"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="assets/blobs.js"></script>
+<script src="assets/paste.js"></script>
+</body>
+</html>
