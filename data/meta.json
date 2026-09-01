@@ -1,0 +1,15 @@
+{
+  "examplepaste": {
+    "title": "Example Paste",
+    "date": "2026-08-31 12:00",
+    "views": 3,
+    "author": "Anonymous",
+    "comments": [
+      {
+        "author": "Anonymous",
+        "date": "2026-08-31 12:05",
+        "text": "just a demo comment"
+      }
+    ]
+  }
+}
